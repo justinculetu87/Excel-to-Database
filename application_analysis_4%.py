@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 #load the master csv each time - if needed, uncomment the one below to add the interim data
-df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\Application_analysis_master.csv')
+df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Interim Data\interim_analysis.csv')
 df_main = df_main.dropna(how='all')  #removes rows with empty columns
 #df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Interim Data\Application_analysis.csv') #ONLY RUN IF REFORMATTING#
 
@@ -12,9 +12,8 @@ df_main = df_main.dropna(how='all')  #removes rows with empty columns
 if 'Averages' in df_main.iloc[:,0].values:
      df_main = df_main[df_main.iloc[:,0] != 'Averages']
 
-##filter out non-unique funding sources
 
-#functions to 
+#functions to pull unique variables
 def dollar_convert(value): #convert to integers to do calculations in cell transfer 
         if value is not None and isinstance (value, str) and '$' in value:
             return float(value.replace('$', '').replace (',', ''))
@@ -131,6 +130,10 @@ def application_workbooks(work_book):
         'Parking Structure': ws1['AG449'].value if ws1['AG449'].value is not None else '',
         'Total Gross Sq Ft': ws1['AG450'].value if ws1['AG450'].value is not None else '',
         'Land Cost – Total ($)': f"${dollar_convert(ws1['Q391'].value)}",
+        'Name of Land Seller': ws1['J385'].value if ws1['J385'].value is not None else '',
+        'Land Seller Address': ws1['J388'].value if ws1['J388'].value is not None else '',
+        'Land Seller Phone #': ws1['I392'].value if ws1['I392'].value is not None else '',
+        'Signatory of Seller': ws1['AC385'].value if ws1['AC385'].value is not None else '',
         'Land Cost / Unit ($)': f"${dollar_convert(ws1['Q391'].value) / ws1['AG437'].value:.0f}" if ws1['Q391'].value not in (None, 0, 'N/A') and ws1['AG437'].value not in (None, 0, 'N/A') else '', 
         'Land Cost / Acre ($)': f"${dollar_convert(ws1['Q391'].value) / dollar_convert(ws1['P418'].value):.0f}" if ws1['Q391'].value not in (None, 0, 'N/A') and ws1['P418'].value not in (None, 0, 'N/A') else '',
         'Ground Lease Proceeds': f"${dollar_convert(ground_lease_target or haven_target or safehold_target):.0f}" if (ground_lease_target or haven_target or safehold_target) not in (None, 0) else '',  
@@ -265,8 +268,8 @@ for col in df_main.columns:
 df_main = pd.concat([df_main, pd.DataFrame([average])], ignore_index = True)
 df_main.iloc[-1, 0] = 'Averages'
 
-
-df_main.to_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\Application_analysis_master.csv', index=False, encoding='utf-8-sig')  
+#make sure to change this when needed depending on what is being pulled
+df_main.to_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\winning_analysis_master_25.csv', index=False, encoding='utf-8-sig')  
 print('File saved successfully')
 
     
