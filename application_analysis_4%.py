@@ -13,6 +13,9 @@ if 'Averages' in df_main.iloc[:,0].values:
      df_main = df_main[df_main.iloc[:,0] != 'Averages']
 
 
+##filter out non-unique funding sources
+
+
 #functions to pull unique variables
 def dollar_convert(value): #convert to integers to do calculations in cell transfer 
         if value is not None and isinstance (value, str) and '$' in value:
