@@ -12,6 +12,10 @@ df_main = df_main.dropna(how='all')  #removes rows with empty columns
 if 'Averages' in df_main.iloc[:,0].values:
      df_main = df_main[df_main.iloc[:,0] != 'Averages']
 
+<<<<<<< HEAD
+=======
+##filter out non-unique funding sources
+>>>>>>> 36414b67eaa524967834dbda4a38924016aa34ec
 
 #functions to 
 def dollar_convert(value): #convert to integers to do calculations in cell transfer 
