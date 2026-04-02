@@ -37,7 +37,7 @@ def only_numeric(value):
         return False
 
 #define workbooks
-def application_workbooks(work_book):
+def application_workbooks(work_book, file_name):
     ws1 = work_book['Application'] 
     ws2 = work_book['Sources and Uses Budget']
     ws3 = work_book['Basis & Credits']
@@ -122,6 +122,8 @@ def application_workbooks(work_book):
 
 
     new_row = { #call the cell values
+        'Application #': file_name, 
+        'Applicant Name': ws1['H16'].value if ws1['H16'].value is not None else '',
         'Project Name': ws1['H18'].value if ws1['H18'].value is not None else '', 
         'Project Type': ws1['D211']. value if ws1['D211'].value is not None else '',
         'Geographic':  ws1['D220'].value if ws1['D220'].value is not None else '',
@@ -201,8 +203,8 @@ if add_application.lower() == 'yes':
                 print(f'Error opening file: {e}. Re-enter file path.')
                 continue
 
-            new_row = application_workbooks(work_book) #add the new application to the excel
-            new_obs.append(new_row )
+            new_row = application_workbooks(work_book, os.path.basename(file_path)) #add the new application to the excel
+            new_obs.append(new_row)
 
             #adding another single observation
             add_another = input('Add another application? (yes/no): ')  #adding another single file?
@@ -227,7 +229,7 @@ if add_application.lower() == 'yes':
                     print(f'Error opening {file}: {e}. Skip')
                     continue
 
-                new_row = application_workbooks(work_book)
+                new_row = application_workbooks(work_book, file)
                 new_obs.append(new_row)
 
 #add to dataframe
