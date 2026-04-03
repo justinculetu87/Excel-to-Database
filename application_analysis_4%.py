@@ -118,7 +118,7 @@ def application_workbooks(work_book, file_name):
                 if isinstance(val_perm_percent,(int,float)):
                     perm_loan_percent = val_perm_percent 
 
-    parking_spaces = ws1['Q494'].value if only_numeric(ws1['Q494'].value) and ws1['Q494'].value not in (None, 0, 'N/A') else (ws1['M495'].value or 0) + (ws1['AH495'].value or 0) #to make parking ratio easier
+    parking_spaces = only_numeric(ws1['Q494'].value) if only_numeric(ws1['Q494'].value) not in (None, 0) else (only_numeric(ws1['M495'].value) or 0) + (only_numeric(ws1['AH495'].value) or 0)
 
 
     new_row = { #call the cell values
@@ -274,7 +274,7 @@ df_main = pd.concat([df_main, pd.DataFrame([average])], ignore_index = True)
 df_main.iloc[-1, 0] = 'Averages'
 
 #make sure to change this when needed depending on what is being pulled
-df_main.to_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\winning_analysis_master_25.csv', index=False, encoding='utf-8-sig')  
+df_main.to_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\losing_analysis_master_25.csv', index=False, encoding='utf-8-sig')  
 print('File saved successfully')
 
     
