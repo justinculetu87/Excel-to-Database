@@ -29,12 +29,19 @@ def percent_convert(value): #convert to integers to do calculations in cell tran
 
 def only_numeric(value):
     if value is None:
-        return False
+        return None
     try:
-        float(str(value).replace('$', '').replace(',', '').replace('%', ''))
-        return True
+        float(str(value).replace('$', '').replace(',', '').replace('%', '').strip())
     except ValueError:
-        return False
+        return None
+    
+def safe_float(value):
+    if value is None:
+        return None
+    try:
+        return float(str(value).replace('$', '').replace(',', '').replace('%', '').strip())
+    except (ValueError, TypeError):
+        return None
 
 #define workbooks
 def application_workbooks(work_book, file_name):
@@ -44,7 +51,6 @@ def application_workbooks(work_book, file_name):
     ws4 = work_book['Sources and Basis Breakdown']
     ws5 = work_book['Tie Breaker']
     ws6 = work_book['CalHFA Addendum']
-
 
     #potential target values that are not always in the same cell
     deferred_target = None
@@ -94,7 +100,7 @@ def application_workbooks(work_book, file_name):
                         soft_fund_percent = val_soft_percent
                 break
 
-    perm_lender = None  ###############
+    perm_lender = None
     for row in ws1.iter_rows(min_row=627, max_row=638, min_col=3, max_col=41):
         for cell in row:
             if cell.value and 'required' in str(cell.value).lower():
@@ -118,8 +124,8 @@ def application_workbooks(work_book, file_name):
                 if isinstance(val_perm_percent,(int,float)):
                     perm_loan_percent = val_perm_percent 
 
-    parking_spaces = only_numeric(ws1['Q494'].value) if only_numeric(ws1['Q494'].value) not in (None, 0) else (only_numeric(ws1['M495'].value) or 0) + (only_numeric(ws1['AH495'].value) or 0)
-
+    parking_spaces = safe_float(ws1['Q494'].value) if safe_float(ws1['Q494'].value) else (safe_float(ws1['M495'].value) or 0) + (safe_float(ws1['AH495'].value) or 0)
+    
 
     new_row = { #call the cell values
         'Application #': file_name, 
@@ -205,6 +211,7 @@ if add_application.lower() == 'yes':
 
             new_row = application_workbooks(work_book, os.path.basename(file_path)) #add the new application to the excel
             new_obs.append(new_row)
+           
 
             #adding another single observation
             add_another = input('Add another application? (yes/no): ')  #adding another single file?
