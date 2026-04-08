@@ -132,6 +132,8 @@ def application_workbooks(work_book, file_name):
         'Applicant Name': ws1['H16'].value if ws1['H16'].value is not None else '',
         'Project Name': ws1['H18'].value if ws1['H18'].value is not None else '', 
         'Project Type': ws1['D211']. value if ws1['D211'].value is not None else '',
+        'Requested Credit': ws1['D355'].value if ws1['M355'].value not in (None, 'N/A', 'NA') else ws1['D356'].value if ws1['M356'].value not in (None, 'N/A', 'NA') else ws1['D357'].value 
+        if ws1['M357'] not in (None, 'N/A', 'NA') else ws1['D358'].value if ws1['M358'] not in (None, 'N/A', 'NA') else'',
         'Geographic':  ws1['D220'].value if ws1['D220'].value is not None else '',
         'Total Units': ws1['AG437'].value if ws1['AG437'].value is not None else '',
         'Acreage': f"{ws1['P418'].value:.1f}" if ws1['P418'].value is not None else '',
@@ -148,7 +150,7 @@ def application_workbooks(work_book, file_name):
         'Land Cost / Unit ($)': f"${dollar_convert(ws1['Q391'].value) / ws1['AG437'].value:.0f}" if ws1['Q391'].value not in (None, 0, 'N/A') and ws1['AG437'].value not in (None, 0, 'N/A') else '', 
         'Land Cost / Acre ($)': f"${dollar_convert(ws1['Q391'].value) / dollar_convert(ws1['P418'].value):.0f}" if ws1['Q391'].value not in (None, 0, 'N/A') and ws1['P418'].value not in (None, 0, 'N/A') else '',
         'Ground Lease Proceeds': f"${dollar_convert(ground_lease_target or haven_target or safehold_target):.0f}" if (ground_lease_target or haven_target or safehold_target) not in (None, 0) else '',  
-        'Parking Spaces': ws1['Q494'].value if only_numeric(ws1['Q494'].value) and ws1['Q494'].value not in (None, 0, 'N/A') else (ws1['M495'].value or 0) + (ws1['AH495'].value or 0), 
+        'Parking Spaces': safe_float(ws1['Q494'].value) if safe_float(ws1['Q494'].value) and safe_float(ws1['Q494'].value) not in (None, 0, 'N/A') else (safe_float(ws1['M495'].value) or 0) + (safe_float(ws1['AH495'].value) or 0), 
         'Parking Ratio': f"{(parking_spaces / ws1['AG439'].value) * 100:.2f}%" if ws1['AG439'].value not in (None, 0, 'N/A') else '', 
         #'Parking Type': enter after running , 
         '1BR Units (%)': f"{ws1['AB987'].value} ({ws1['AB987'].value / ws1['AG437'].value * 100:.0f}%)" if ws1['AG437'].value is not None else '',
@@ -280,9 +282,16 @@ for col in df_main.columns:
 df_main = pd.concat([df_main, pd.DataFrame([average])], ignore_index = True)
 df_main.iloc[-1, 0] = 'Averages'
 
-#make sure to change this when needed depending on what is being pulled
-df_main.to_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\losing_analysis_master_25.csv', index=False, encoding='utf-8-sig')  
-print('File saved successfully')
+#Ask if user wants to save to winning or losing master file
+master_type = input('Save to winning or losing analysis (winning/losing): ' )
+if master_type.lower() == 'winning':
+    df_main.to_excel('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\winning_analysis_master_25.xlsx', index=False)
+    print('File saved successfully')
+
+if master_type.lower() == "losing":
+    df_main.to_excel('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\losing_analysis_master_25.xlsx', index=False)
+    print('File saved successfully')
+
 
     
 
