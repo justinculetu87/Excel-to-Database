@@ -131,6 +131,7 @@ def application_workbooks(work_book, file_name):
         'Application #': file_name, 
         'Applicant Name': ws1['H16'].value if ws1['H16'].value is not None else '',
         'Project Name': ws1['H18'].value if ws1['H18'].value is not None else '', 
+        'Site Address': ws1['I185'].value if ws1['I185'].value is not None else ws1['E187'].value if ws1['E187'].value is not None else '', 
         'Project Type': ws1['D211']. value if ws1['D211'].value is not None else '',
         'Requested Credit': ws1['D355'].value if ws1['M355'].value not in (None, 'N/A', 'NA') else ws1['D356'].value if ws1['M356'].value not in (None, 'N/A', 'NA') else ws1['D357'].value 
         if ws1['M357'] not in (None, 'N/A', 'NA') else ws1['D358'].value if ws1['M358'] not in (None, 'N/A', 'NA') else'',
