@@ -6,7 +6,7 @@ import os
 #load the master csv each time - if needed, uncomment the one below to add the interim data
 df_main = pd.read_csv('.csv')
 df_main = df_main.dropna(how='all')  #removes rows with empty columns
-#df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Interim Data\Application_analysis.csv') #ONLY RUN IF REFORMATTING#
+#df_main = pd.read_csv('Application_analysis.csv') #ONLY RUN IF REFORMATTING#
 
 #add averages for later
 if 'Averages' in df_main.iloc[:,0].values:
