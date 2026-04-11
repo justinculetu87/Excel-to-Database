@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 #load the master csv each time - if needed, uncomment the one below to add the interim data
-df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Interim Data\interim_analysis.csv')
+df_main = pd.read_csv('.csv')
 df_main = df_main.dropna(how='all')  #removes rows with empty columns
 #df_main = pd.read_csv('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Interim Data\Application_analysis.csv') #ONLY RUN IF REFORMATTING#
 
@@ -287,11 +287,11 @@ df_main.iloc[-1, 0] = 'Averages'
 #Ask if user wants to save to winning or losing master file
 master_type = input('Save to winning or losing analysis (winning/losing): ' )
 if master_type.lower() == 'winning':
-    df_main.to_excel('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\winning_analysis_master_25.xlsx', index=False)
+    df_main.to_excel('winning_analysis_master_25.xlsx', index=False)
     print('File saved successfully')
 
 if master_type.lower() == "losing":
-    df_main.to_excel('P:\Housing Development Share\Development Cost Initiative\CDLAC_TCAC Competition Analysis\Application Analysis\Output\Master File\losing_analysis_master_25.xlsx', index=False)
+    df_main.to_excel('losing_analysis_master_25.xlsx', index=False)
     print('File saved successfully')
 
 
